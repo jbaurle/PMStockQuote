@@ -49,6 +49,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="LICENSE.txt" />
     <Content Include="PMStockQuote.dna">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

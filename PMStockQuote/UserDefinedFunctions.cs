@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright © Jürgen Bäurle, http://www.parago.de
+// This code released under the terms of the Microsoft Public License (MS-PL)
+
+using System;
 using System.Globalization;
 using System.IO;
 using System.Net;

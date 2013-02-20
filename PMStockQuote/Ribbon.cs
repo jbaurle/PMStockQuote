@@ -1,4 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿// Copyright © Jürgen Bäurle, http://www.parago.de
+// This code released under the terms of the Microsoft Public License (MS-PL)
+
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using ExcelDna.Integration;
 using ExcelDna.Integration.CustomUI;
