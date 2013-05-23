@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AddIn.cs" />
     <Compile Include="Ribbon.cs" />
+    <Compile Include="TimeoutWatch.cs" />
     <Compile Include="UserDefinedFunctions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
