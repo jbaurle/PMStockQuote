@@ -3,7 +3,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Program</StartAction>
     <StartProgram>C:\Program Files\Microsoft Office\Office15\EXCEL.EXE</StartProgram>
-    <StartArguments>.\bin\Debug\PMStockQuote64.xll</StartArguments>
+    <StartArguments>"C:\PMStockQuote\Source-Codeplex\pmstockquote\PMStockQuote\bin\Debug\PMStockQuote64.xll"</StartArguments>
     <StartWorkingDirectory>
     </StartWorkingDirectory>
   </PropertyGroup>

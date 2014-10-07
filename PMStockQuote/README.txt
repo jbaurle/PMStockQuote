@@ -30,9 +30,9 @@ How to find out what Excel version (32 or 64-bit) you are using?
 1. Open Excel, click FILE > Account > Info-Button
 2. The dialog is showing the version type 32-bit or 64-bit
 
--------------------------------------------------------------
-How to execute Excel 2013 with Ctrl-F5 in Visual Studio 2012?
--------------------------------------------------------------
+------------------------------------------------------------------
+How to execute Excel 2013 with Ctrl-F5 in Visual Studio 2012/2013?
+------------------------------------------------------------------
 
 1. Open project properties and select Debug tab.
-2. In the comand line arguments textbox define the xll file to you are gernerating with this project.
+2. In the comand line arguments textbox define the xll file to you are generating with this project.

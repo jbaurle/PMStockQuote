@@ -20,7 +20,7 @@ namespace PMStockQuote
 
 		public void OnAboutButtonClick(IRibbonControl control)
 		{
-			MessageBox.Show("To retrieve stock quotes see the following formula samples:\n\n\t=PSQ(A1;\"PRICE\") or just =PSQ(A1)\n\t=PSQ(A1;\"DATE\")\n\t=PSQ(A1;\"TIME\"\n\t=PSQ(A1;\"NAME\")\n\nThe PMStockQuote Add-In is developed by Jürgen Bäurle, http://www.parago.de.\n\n", "PMStockQuote Add-In", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			MessageBox.Show("To retrieve stock quotes or foreign-exchange rates see the following formula samples:\n\n\t=PSQ(A1;\"PRICE\") or just =PSQ(A1)\n\t=PSQ(A1;\"DATE\")\n\t=PSQ(A1;\"TIME\"\n\t=PSQ(A1;\"NAME\")\n\n\t=PFX(A1;\"RATE\") or just =PFX(A1)\n\t=PFX(A1;\"DATE\")\n\t=PFX(A1;\"TIME\"\n\t=PFX(A1;\"NAME\")\n\nThe PMStockQuote Add-In is developed by Jürgen Bäurle, http://www.parago.de.\n\n", "PMStockQuote Add-In", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 	}
 }

@@ -10,8 +10,6 @@ namespace PMStockQuote
 	{
 		public void AutoOpen()
 		{
-			ExcelAsyncUtil.Initialize();
-
 			ExcelIntegration.RegisterUnhandledExceptionHandler(e => "ERROR: " + (e as Exception).Message);
 
 			//var excel = (Microsoft.Office.Interop.Excel.Application)ExcelDnaUtil.Application;
@@ -21,7 +19,6 @@ namespace PMStockQuote
 
 		public void AutoClose()
 		{
-			ExcelAsyncUtil.Uninitialize();
 		}
 	}
 }

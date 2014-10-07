@@ -32,8 +32,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ExcelDna.Integration">
-      <HintPath>..\packages\Excel-DNA.0.30.3\lib\ExcelDna.Integration.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\Excel-DNA.Lib.0.32.0\lib\ExcelDna.Integration.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -63,7 +63,7 @@
     <None Include="Install64.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Packages.config" />
+    <None Include="packages.config" />
     <None Include="PMStockQuote.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -72,12 +72,19 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo Build 32-bit version. using ExcelDna.xll
-copy "$(SolutionDir)Packages\Excel-DNA.0.30.3\tools\ExcelDna.xll" "$(TargetDir)PMStockQuote.xll"
-"$(SolutionDir)Packages\Excel-DNA.0.30.3\tools\ExcelDnaPack.exe" "$(TargetDir)PMStockQuote.dna" /Y /O "$(TargetDir)PMStockQuote.xll"
+copy "$(SolutionDir)Packages\Excel-DNA.0.32.0\tools\ExcelDna.xll" "$(TargetDir)PMStockQuote.xll"
+"$(SolutionDir)Packages\Excel-DNA.0.32.0\tools\ExcelDnaPack.exe" "$(TargetDir)PMStockQuote.dna" /O "$(TargetDir)PMStockQuote-Packed.xll" /Y
+copy "$(TargetDir)PMStockQuote-Packed.xll" "$(TargetDir)PMStockQuote.xll" /Y
+del "$(TargetDir)PMStockQuote-Packed.xll"
 
 echo Build 64-bit version. using ExcelDna64.xll
-copy "$(SolutionDir)Packages\Excel-DNA.0.30.3\tools\ExcelDna64.xll" "$(TargetDir)PMStockQuote.xll"
-"$(SolutionDir)Packages\Excel-DNA.0.30.3\tools\ExcelDnaPack.exe" "$(TargetDir)PMStockQuote.dna" /Y /O "$(TargetDir)PMStockQuote64.xll"
+copy "$(SolutionDir)Packages\Excel-DNA.0.32.0\tools\ExcelDna64.xll" "$(TargetDir)PMStockQuote64.xll"
+copy "$(TargetDir)PMStockQuote.dna" "$(TargetDir)PMStockQuote64.dna" /Y
+"$(SolutionDir)Packages\Excel-DNA.0.32.0\tools\ExcelDnaPack.exe" "$(TargetDir)PMStockQuote64.dna" /O "$(TargetDir)PMStockQuote64-Packed.xll" /Y
+copy "$(TargetDir)PMStockQuote64-Packed.xll" "$(TargetDir)PMStockQuote64.xll" /Y
+del "$(TargetDir)PMStockQuote64-Packed.xll"
+
+
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

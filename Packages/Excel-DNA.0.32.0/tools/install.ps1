@@ -1,8 +1,6 @@
 param($installPath, $toolsPath, $package, $project)
 Write-Host "Starting Excel-DNA install script"
 
-Write-Host "`tSet reference to ExcelDna.Integration to be CopyLocal=false"
-$project.Object.References | Where-Object { $_.Name -eq 'ExcelDna.Integration' } | ForEach-Object { $_.CopyLocal = $false }
 $projName = $project.Name
 $isFSharp = ($project.Type -eq "F#")
 # Look for and rename old .dna file
@@ -47,7 +45,6 @@ else
     }
     else
     {
-        # We don't have a file already
         Write-Host "`tCreating -AddIn.dna file"
         
         # Rename and fill in ExcelDna-Template.dna file.
@@ -79,8 +76,11 @@ $fullPath = $project.Properties.Item("FullPath").Value
 # Write-host $toolsPath
 $escapedSearch = [regex]::Escape($project.Properties.Item("FullPath").Value)
 $toolMacro = $toolsPath -replace $escapedSearch, "`$(ProjectDir)"
-$postBuild = "echo F | xcopy `"${toolMacro}\ExcelDna.xll`" `"`$(TargetDir)${projName}-AddIn.xll`" /C /Y"
+$postBuild = "xcopy `"${toolMacro}\ExcelDna.xll`" `"`$(TargetDir)${projName}-AddIn.xll*`" /C /Y"
+$postBuild += "`r`n" + "xcopy `"`$(TargetDir)${projName}-AddIn.dna*`" `"`$(TargetDir)${projName}-AddIn64.dna*`" /C /Y"
+$postBuild += "`r`n" + "xcopy `"${toolMacro}\ExcelDna64.xll`" `"`$(TargetDir)${projName}-AddIn64.xll*`" /C /Y"
 $postBuild += "`r`n" + "`"${toolMacro}\ExcelDnaPack.exe`" `"`$(TargetDir)${projName}-AddIn.dna`" /Y"
+$postBuild += "`r`n" + "`"${toolMacro}\ExcelDnaPack.exe`" `"`$(TargetDir)${projName}-AddIn64.dna`" /Y"
 $prop = $project.Properties.Item("PostBuildEvent")
 if ($prop.Value -eq "") {
 	$prop.Value = $postBuild

@@ -38,7 +38,9 @@ if ($null -ne $dnaFileItem)
 
 # Remove post-build command
 $postBuildCheck = "ExcelDna.xll`""
-$postBuildCheck2 = "ExcelDnaPack.exe`""
+$postBuildCheck2 = "ExcelDna64.xll`""
+$postBuildCheck3 = "-AddIn64.dna*`""
+$postBuildCheck4 = "ExcelDnaPack.exe`""
 $prop = $project.Properties.Item("PostBuildEvent")
 if ($prop.Value -eq "") 
 {
@@ -52,7 +54,7 @@ else
 	$dessert = ""
 	foreach ($scoop in $banana) 
     {
-	   if (!($scoop.Contains($postBuildCheck)) -and !($scoop.Contains($postBuildCheck2))) 
+	   if (!($scoop.Contains($postBuildCheck)) -and !($scoop.Contains($postBuildCheck2)) -and !($scoop.Contains($postBuildCheck3)) -and !($scoop.Contains($postBuildCheck4))) 
        {
            # Keep this scoop
 	       $dessert = "$dessert$scoop`n"

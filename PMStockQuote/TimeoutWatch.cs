@@ -4,9 +4,13 @@ namespace PMStockQuote
 {
 	class TimeoutWatch
 	{
+		#region Fields
+
 		bool _isInfinite;
 		TimeSpan _timeout;
 		DateTime _creationTime;
+
+		#endregion
 
 		public static TimeSpan Infinite { get { return TimeSpan.MaxValue; } }
 
