@@ -23,26 +23,26 @@ namespace PMStockQuote
 		[ExcelFunction(Description = "Retrieves stock data for the passed symbol. The InfoCode defines the type of data that will be returned. InfoCode values: NAME, DATE, TIME and PRICE (default).")]
 		public static object PSQ(string Symbol, string InfoCode)
 		{
-			return ExcelAsyncUtil.Run("PSQ", new object[] { Symbol, InfoCode }, () => PFunction(true, Symbol, InfoCode));
+			return ExcelAsyncUtil.Run("PSQ", new object[] { Symbol, InfoCode }, () => PSQXFunction(true, Symbol, InfoCode));
 		}
 
 		[ExcelFunction(Description = "Retrieves foreign-exchange data for the passed symbol. The InfoCode defines the type of data that will be returned. InfoCode values: NAME, DATE, TIME and RATE (default).")]
 		public static object PFX(string Symbol, string InfoCode)
 		{
-			return ExcelAsyncUtil.Run("PFX", new object[] { Symbol, InfoCode }, () => PFunction(false, Symbol, InfoCode));
+			return ExcelAsyncUtil.Run("PFX", new object[] { Symbol, InfoCode }, () => PSQXFunction(false, Symbol, InfoCode));
 		}
 
 		#region Helper Methods
 
-		static object PFunction(bool stockQuote, string Symbol, string InfoCode)
+		static object PSQXFunction(bool stockQuote, string Symbol, string InfoCode)
 		{
 			if(string.IsNullOrWhiteSpace(Symbol))
 				throw new Exception("Symbol must be defined.");
 			if(string.IsNullOrWhiteSpace(InfoCode))
 				InfoCode = "PRICE";
 
-			string symbol = Symbol.Trim();
-			string content = string.Empty;
+			var symbol = Symbol.Trim();
+			var content = string.Empty;
 
 			try
 			{
@@ -64,9 +64,9 @@ namespace PMStockQuote
 					content = _cache[symbol];
 				else
 				{
-					WebClient client = new WebClient();
+					var client = new WebClient();
 					Stream data = client.OpenRead("http://download.finance.yahoo.com/d/quotes.csv?s=" + symbol + (stockQuote ? string.Empty : "=X") + "&f=sl1d1t1n");
-					StreamReader reader = new StreamReader(data);
+					var reader = new StreamReader(data);
 					content = reader.ReadToEnd();
 					data.Close();
 					reader.Close();
@@ -79,33 +79,49 @@ namespace PMStockQuote
 							_cache.Add(symbol, content);
 					}
 				}
+
+				string[] quote = content.Split(",".ToCharArray());
+
+				switch(InfoCode.Trim().ToUpper())
+				{
+					case "NAME":
+						return quote[4].Replace("\"", "").Replace("\r", "").Replace("\n", "");
+					case "DATE":
+						if(quote[2] == "N/A")
+							return ExcelError.ExcelErrorNA;
+						return Convert.ToDateTime(quote[2].Trim("\"".ToCharArray()), CultureInfo.InvariantCulture).ToShortDateString();
+					case "DATELOCAL":
+						if(quote[2] == "N/A")
+							return ExcelError.ExcelErrorNA;
+						return ConvertDateTimeToLocal(quote[2].Trim("\"".ToCharArray())).ToShortDateString();
+					case "TIME":
+						if(quote[3] == "N/A")
+							return ExcelError.ExcelErrorNA;
+						return Convert.ToDateTime(quote[3].Trim("\"".ToCharArray()), CultureInfo.InvariantCulture).ToShortTimeString();
+					case "TIMELOCAL":
+						if(quote[3] == "N/A")
+							return ExcelError.ExcelErrorNA;
+						return ConvertDateTimeToLocal(quote[3].Trim("\"".ToCharArray())).ToShortTimeString();
+					case "RATE":
+					case "PRICE":
+					default:
+						if(quote[1] == "N/A")
+							return ExcelError.ExcelErrorNA;
+						return Convert.ToDouble(quote[1], CultureInfo.InvariantCulture);
+				}
 			}
 			catch(Exception e)
 			{
 				throw new Exception("Couldn't retrieve and/or process financial data from internet service. Internal message: " + e.Message);
 			}
+		}
 
-			string[] quote = content.Split(",".ToCharArray());
+		static DateTime ConvertDateTimeToLocal(string dateOrTime)
+		{
+			var time = Convert.ToDateTime(dateOrTime, CultureInfo.InvariantCulture);
+			var zone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
-			switch(InfoCode.Trim().ToUpper())
-			{
-				case "NAME":
-					return quote[4].Replace("\"", "").Replace("\r", "").Replace("\n", "");
-				case "DATE":
-					if(quote[2] == "N/A")
-						return ExcelError.ExcelErrorNA;
-					return Convert.ToDateTime(quote[2].Trim("\"".ToCharArray()), CultureInfo.InvariantCulture).ToShortDateString();
-				case "TIME":
-					if(quote[3] == "N/A")
-						return ExcelError.ExcelErrorNA;
-					return Convert.ToDateTime(quote[3].Trim("\"".ToCharArray()), CultureInfo.InvariantCulture).ToShortTimeString();
-				case "RATE":
-				case "PRICE":
-				default:
-					if(quote[1] == "N/A")
-						return ExcelError.ExcelErrorNA;
-					return Convert.ToDouble(quote[1], CultureInfo.InvariantCulture);
-			}
+			return TimeZoneInfo.ConvertTime(time, zone, TimeZoneInfo.Local);
 		}
 
 		#endregion
