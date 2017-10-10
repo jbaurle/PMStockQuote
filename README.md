@@ -34,7 +34,7 @@ German Edition of Excel 2013:
 This add-in is based on a previous version I wrote for Excel 2007 and Excel 2010. Below I have listed a couple of links to the old version:
 
 Stock Quote Add-In for Excel 2016
-![http://www.parago.de/blog/2017/01/01/stock-quote-add-in-for-excel-2016](http://www.parago.de/blog/2017/01/01/stock-quote-add-in-for-excel-2016)
+[http://www.parago.de/blog/2017/01/01/stock-quote-add-in-for-excel-2016](http://www.parago.de/blog/2017/01/01/stock-quote-add-in-for-excel-2016)
 
 Installer for MSN-like Stock Quotes Add-In For Excel 2010 and 2007:
 [http://www.parago.de/blog/2009/01/07/update-installer-for-msn-like-stock-quotes-add-in-for-excel-2007](http://www.parago.de/blog/2009/01/07/update-installer-for-msn-like-stock-quotes-add-in-for-excel-2007)
