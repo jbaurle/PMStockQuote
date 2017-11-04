@@ -1,3 +1,10 @@
+# IMPORTANT NOTICE:
+
+The Stock Quote add-in is using the Yahoo Finance service to retrieve the stock quotes. **The service seems to be terminated by Yahoo without any notice on 11/01/2017.** I will try to find an alternative solution as soon as possible, but I'm not sure how long it will take. You may check out this site from time to time for a new version to download.
+
+Jürgen
+
+----
 # PMStockQuote
 
 **Stock Quote Add-In For Excel 2016 and 2013**
