@@ -5,10 +5,12 @@ The new version is now using the Google Finance API and is not compatible with t
 ----
 # PMStockQuote
 
-**RELEASES**
+**RELEASE**
 
 Stock Quote Add-In For Excel 2018 R1<br>
 https://github.com/jbaurle/PMStockQuote/releases/tag/Stock_Quote_Add-In_For_Excel_2018_R1
+
+To install the version download PMStockQuote.zip, extract the archive file and call either Install32.bat or Install64.bat depending on the Excel version (32/64-bit) installed on your computer. [What version of Office am I using?](https://support.office.com/en-us/article/About-Office-What-version-of-Office-am-I-using-932788b8-a3ce-44bf-bb09-e334518b8b19)
 
 **Stock Quote Add-In For Excel 2016 and 2013**
 
