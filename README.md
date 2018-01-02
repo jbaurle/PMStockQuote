@@ -1,6 +1,6 @@
 # IMPORTANT NOTICE
 
-The old Stock Quote add-in was using the Yahoo Finance service to retrieve the stock quotes. **The service seems to be terminated by Yahoo without any notice on 11/01/2017.** The new version is now using the Google Finance API and is not compatible with the old add-in. Google Finance uses other ticker symbols. In addition there is a new ticker search ticker dialog.
+The old Stock Quote add-in was using the Yahoo Finance service to retrieve the stock quotes. The service seems to be terminated by Yahoo without any notice on 11/01/2017. The new version is now using the Google Finance API and is not compatible with the old add-in. Google Finance uses other ticker symbols. A new search dialog is now available and more data values can be retrieved.
 
 ----
 # PMStockQuote
@@ -28,7 +28,7 @@ The add-in is providing an Excel function called **PSQ** to retrieve stock data 
 * **=PSQ(A1;"TICKER")** or **=PSQ(A1;"SYMBOL")**
 * **=PSQ(A1;"EXCHANGE")**
 
-**DATE and TIME are the timestamp of the last query, not the last trade date. Google Finance API is not returning the this kind of data anymore.**
+DATE and TIME are the timestamp of the last query, not the last trade date. Google Finance API is not returning the this kind of data anymore.
 
 **Screenshots**
 
@@ -38,23 +38,23 @@ German Edition of Excel 2016:
 
 German Edition of Excel 2013:
 
-![](docs/PMStockQuoteExcelAddIn.jpg)
+![](docs/PMStockQuoteExcelAddIn.png)
 
 **Links**
 
 This add-in is based on a previous version I wrote for Excel 2007 and Excel 2010. Below I have listed a couple of links to the old version:
 
-Stock Quote Add-In for Excel 2016
+Stock Quote Add-In for Excel 2016<br>
 [http://www.parago.de/blog/2017/01/01/stock-quote-add-in-for-excel-2016](http://www.parago.de/blog/2017/01/01/stock-quote-add-in-for-excel-2016)
 
-Installer for MSN-like Stock Quotes Add-In For Excel 2010 and 2007:
+Installer for MSN-like Stock Quotes Add-In For Excel 2010 and 2007<br>
 [http://www.parago.de/blog/2009/01/07/update-installer-for-msn-like-stock-quotes-add-in-for-excel-2007](http://www.parago.de/blog/2009/01/07/update-installer-for-msn-like-stock-quotes-add-in-for-excel-2007)
 
-Blog with Stock Quote Add-In posts:
+Blog with Stock Quote Add-In posts<br>
 [http://www.parago.de/tag/excel/](http://www.parago.de/tag/excel/)
 
-Stock Quote Add-In For Excel 2007 (CodeProject)
+Stock Quote Add-In For Excel 2007 (CodeProject)<br>
 [http://www.codeproject.com/Articles/67082/Stock-Quote-Add-In-For-Excel-2007](http://www.codeproject.com/Articles/67082/Stock-Quote-Add-In-For-Excel-2007)
 
-Creating A MSN-like Stock Quotes Add-In For Excel 2007 Using User-Defined Functions And Ribbons (PDF)
+Creating A MSN-like Stock Quotes Add-In For Excel 2007 Using User-Defined Functions And Ribbons (PDF)<br>
 [http://content.parago.de/articles/Excel2007StockQuotesAddIn/CreatingAMSNlikeStockQuotesAddInForExcel2007UsingUserDefinedFunctionsAndRibbons.pdf](http://content.parago.de/articles/Excel2007StockQuotesAddIn/CreatingAMSNlikeStockQuotesAddInForExcel2007UsingUserDefinedFunctionsAndRibbons.pdf)
