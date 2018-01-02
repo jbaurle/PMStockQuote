@@ -49,19 +49,5 @@ German Edition of Excel 2013:
 
 **Links**
 
-This add-in is based on a previous version I wrote for Excel 2007 and Excel 2010. Below I have listed a couple of links to the old version:
-
-Blog with Stock Quote Add-In posts<br>
-[http://www.parago.de/tag/excel/](http://www.parago.de/tag/excel/)
-
 Stock Quote Add-In for Excel 2016<br>
-[http://www.parago.de/blog/2017/01/01/stock-quote-add-in-for-excel-2016](http://www.parago.de/blog/2017/01/01/stock-quote-add-in-for-excel-2016)
-
-Installer for MSN-like Stock Quotes Add-In For Excel 2010 and 2007<br>
-[http://www.parago.de/blog/2009/01/07/update-installer-for-msn-like-stock-quotes-add-in-for-excel-2007](http://www.parago.de/blog/2009/01/07/update-installer-for-msn-like-stock-quotes-add-in-for-excel-2007)
-
-Stock Quote Add-In For Excel 2007 (CodeProject)<br>
-[http://www.codeproject.com/Articles/67082/Stock-Quote-Add-In-For-Excel-2007](http://www.codeproject.com/Articles/67082/Stock-Quote-Add-In-For-Excel-2007)
-
-Creating A MSN-like Stock Quotes Add-In For Excel 2007 Using User-Defined Functions And Ribbons (PDF)<br>
-[http://content.parago.de/articles/Excel2007StockQuotesAddIn/CreatingAMSNlikeStockQuotesAddInForExcel2007UsingUserDefinedFunctionsAndRibbons.pdf](http://content.parago.de/articles/Excel2007StockQuotesAddIn/CreatingAMSNlikeStockQuotesAddInForExcel2007UsingUserDefinedFunctionsAndRibbons.pdf)
+[http://www.parago.de/pmstockquoteexceladdin/](http://www.parago.de/pmstockquoteexceladdin/)
