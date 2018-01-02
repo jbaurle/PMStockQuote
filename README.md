@@ -5,6 +5,11 @@ The new version is now using the Google Finance API and is not compatible with t
 ----
 # PMStockQuote
 
+**RELEASES**
+
+Stock Quote Add-In For Excel 2018 R1<br>
+https://github.com/jbaurle/PMStockQuote/releases/tag/Stock_Quote_Add-In_For_Excel_2018_R1
+
 **Stock Quote Add-In For Excel 2016 and 2013**
 
 The Stock Quote Add-In For Excel 2016/2013 is a small add-in based on the fantastic Excel-DNA library to retrieve stock data from Google Finance using the PSQ function.
