@@ -1,8 +1,6 @@
 # IMPORTANT NOTICE
 
-The old Stock Quote add-in was using the Yahoo Finance service to retrieve the stock quotes. The service seems to be terminated by Yahoo without any notice on 11/01/2017.
-
-The new version is now using the Google Finance API and is not compatible with the old add-in. Google Finance uses other ticker symbols. A new search dialog is now available and more data values can be retrieved.
+The new version is now using the Google Finance API and is not compatible with the old add-in. Google Finance uses other ticker symbols. A new search dialog is now available and more data values can be retrieved. The old Stock Quote add-in was using the Yahoo Finance service to retrieve the stock quotes. The service seems to be terminated by Yahoo without any notice on 11/01/2017.
 
 ----
 # PMStockQuote
