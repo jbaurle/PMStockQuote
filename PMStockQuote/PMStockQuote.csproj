@@ -11,7 +11,8 @@
     <AssemblyName>PMStockQuote</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,20 +32,40 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ExcelDna.Integration">
-      <HintPath>..\packages\Excel-DNA.Lib.0.32.0\lib\ExcelDna.Integration.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ExcelDna.Integration, Version=0.34.6373.42344, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDna.Integration.0.34.6\lib\ExcelDna.Integration.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddIn.cs" />
+    <Compile Include="GoogleFinanceData.cs" />
+    <Compile Include="GoogleFinanceDataConverter.cs" />
+    <Compile Include="GoogleFinanceHelper.cs" />
+    <Compile Include="GoogleFinanceResult.cs" />
+    <Compile Include="GoogleFinanceResultItem.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="Ribbon.cs" />
+    <Compile Include="SearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchForm.Designer.cs">
+      <DependentUpon>SearchForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.cs" />
     <Compile Include="TimeoutWatch.cs" />
     <Compile Include="UserDefinedFunctions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,36 +74,52 @@
     <Content Include="PMStockQuote.dna">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="README.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Install32.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Install64.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
+    <None Include="Packages.config" />
     <None Include="PMStockQuote.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Properties\ExcelDna.Build.props" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="SearchForm.resx">
+      <DependentUpon>SearchForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo Build 32-bit version. using ExcelDna.xll
-copy "$(SolutionDir)Packages\Excel-DNA.0.32.0\tools\ExcelDna.xll" "$(TargetDir)PMStockQuote.xll"
-"$(SolutionDir)Packages\Excel-DNA.0.32.0\tools\ExcelDnaPack.exe" "$(TargetDir)PMStockQuote.dna" /O "$(TargetDir)PMStockQuote-Packed.xll" /Y
 copy "$(TargetDir)PMStockQuote-Packed.xll" "$(TargetDir)PMStockQuote.xll" /Y
 del "$(TargetDir)PMStockQuote-Packed.xll"
 
 echo Build 64-bit version. using ExcelDna64.xll
-copy "$(SolutionDir)Packages\Excel-DNA.0.32.0\tools\ExcelDna64.xll" "$(TargetDir)PMStockQuote64.xll"
 copy "$(TargetDir)PMStockQuote.dna" "$(TargetDir)PMStockQuote64.dna" /Y
-"$(SolutionDir)Packages\Excel-DNA.0.32.0\tools\ExcelDnaPack.exe" "$(TargetDir)PMStockQuote64.dna" /O "$(TargetDir)PMStockQuote64-Packed.xll" /Y
 copy "$(TargetDir)PMStockQuote64-Packed.xll" "$(TargetDir)PMStockQuote64.xll" /Y
 del "$(TargetDir)PMStockQuote64-Packed.xll"
 
-
+echo Build distribution folder
+mkdir "$(TargetDir)dist"
+copy "$(TargetDir)Install32.bat" "$(TargetDir)dist\Install32.bat" /Y
+copy "$(TargetDir)Install64.bat" "$(TargetDir)dist\Install64.bat" /Y
+copy "$(TargetDir)README.txt" "$(TargetDir)dist\README.txt" /Y
+copy "$(TargetDir)PMStockQuote.xlsx" "$(TargetDir)dist\PMStockQuote.xlsx" /Y
+copy "$(TargetDir)PMStockQuote.xll" "$(TargetDir)dist\PMStockQuote.xll" /Y
+copy "$(TargetDir)PMStockQuote64.xll" "$(TargetDir)dist\PMStockQuote64.xll" /Y
 </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\ExcelDna.AddIn.0.34.6\tools\ExcelDna.AddIn.targets" Condition="Exists('..\packages\ExcelDna.AddIn.0.34.6\tools\ExcelDna.AddIn.targets')" />
+  <Target Name="EnsureExcelDnaTargetsImported" BeforeTargets="BeforeBuild" Condition="'$(ExcelDnaTargetsImported)' == ''">
+    <Error Condition="!Exists('..\packages\ExcelDna.AddIn.0.34.6\tools\ExcelDna.AddIn.targets') And ('$(RunExcelDnaBuild)' != '' And $(RunExcelDnaBuild))" Text="You are trying to build with ExcelDna, but the NuGet targets file that ExcelDna depends on is not available on this computer. This is probably because the ExcelDna package has not been committed to source control, or NuGet Package Restore is not enabled. Please enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\ExcelDna.AddIn.0.34.6\tools\ExcelDna.AddIn.targets') And ('$(RunExcelDnaBuild)' != '' And $(RunExcelDnaBuild))" Text="ExcelDna cannot be run because NuGet packages were restored prior to the build running, and the targets file was unavailable when the build started. Please build the project again to include these packages in the build. You may also need to make sure that your build server does not delete packages prior to each build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

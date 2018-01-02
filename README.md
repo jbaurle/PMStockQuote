@@ -1,33 +1,35 @@
-# IMPORTANT NOTICE:
+# IMPORTANT NOTICE
 
-The Stock Quote add-in is using the Yahoo Finance service to retrieve the stock quotes. **The service seems to be terminated by Yahoo without any notice on 11/01/2017.** I will try to find an alternative solution as soon as possible, but I'm not sure how long it will take. You may check out this site from time to time for a new version to download.
-
-Jürgen
+The old Stock Quote add-in was using the Yahoo Finance service to retrieve the stock quotes. **The service seems to be terminated by Yahoo without any notice on 11/01/2017.** The new version is now using the Google Finance API and is not compatible with the old add-in. Google Finance uses other ticker symbols. In addition there is a new ticker search ticker dialog.
 
 ----
 # PMStockQuote
 
 **Stock Quote Add-In For Excel 2016 and 2013**
 
-The Stock Quote Add-In For Excel 2016/2013 is a small add-in based on the fantastic Excel-DNA library to retrieve stock data from Yahoo using the PSQ function.
+The Stock Quote Add-In For Excel 2016/2013 is a small add-in based on the fantastic Excel-DNA library to retrieve stock data from Google Finance using the PSQ function.
 
 **Usage**
 
-The add-in is providing an Excel function called **PSQ** to retrieve stock data and a function called **PFX** to retrieve foreign-exchange rate data like quote or rate, name, date and time for the passed symbol. See the following formula samples:
+The add-in is providing an Excel function called **PSQ** to retrieve stock data like open, last, low, high or name for the passed symbol. See the following formula samples:
 
-* **=PSQ(A1;"PRICE")** or just **=PSQ(A1)**
-* **=PSQ(A1;"DATE")** ==> ECT Time
-* **=PSQ(A1;"DATELOCAL")**
-* **=PSQ(A1;"TIME")** ==> ECT Time
-* **=PSQ(A1;"TIMELOCAL")** 
+* **=PSQ(A1;"PRICE")**, **=PSQ(A1;"CLOSE")**, **=PSQ(A1;"LAST")** or just **=PSQ(A1)**
+* **=PSQ(A1;"OPEN")**
+* **=PSQ(A1;"LOW")**
+* **=PSQ(A1;"HIGH")**
+* **=PSQ(A1;"LOW52")**
+* **=PSQ(A1;"HIGH52")**
+* **=PSQ(A1;"VOLUME")**
+* **=PSQ(A1;"CHANGE")**
+* **=PSQ(A1;"CHANGEPERCENTAGE")** or **=PSQ(A1;"CP")**
 * **=PSQ(A1;"NAME")**
+* **=PSQ(A1;"DATE")** => NOT last trade date, just date of last query
+* **=PSQ(A1;"TIME")** => NOT last trade time, just time of last query
+* **=PSQ(A1;"TICKER")** or **=PSQ(A1;"SYMBOL")**
+* **=PSQ(A1;"EXCHANGE")**
 
-* **=PFX(A1;"RATE")** or just **=PFX(A1)**
-* **=PFX(A1;"DATE")** ==> ECT Time
-* **=PFX(A1;"DATELOCAL")**
-* **=PFX(A1;"TIME")** ==> ECT Time
-* **=PFX(A1;"TIMELOCAL")**
-* **=PFX(A1;"NAME")**
+**DATE and TIME are the timestamp of the last query, not the last trade date. Google Finance API is not returning the this kind of data anymore.**
+
 **Screenshots**
 
 German Edition of Excel 2016:
@@ -37,6 +39,8 @@ German Edition of Excel 2016:
 German Edition of Excel 2013:
 
 ![](docs/PMStockQuoteExcelAddIn.jpg)
+
+**Links**
 
 This add-in is based on a previous version I wrote for Excel 2007 and Excel 2010. Below I have listed a couple of links to the old version:
 

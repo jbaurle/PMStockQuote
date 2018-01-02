@@ -3,127 +3,126 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Net;
 using ExcelDna.Integration;
 
 namespace PMStockQuote
 {
-	public static class UserDefinedFunctions
-	{
-		#region Fields
+    public static class UserDefinedFunctions
+    {
+        #region Fields
 
-		static object _cacheLock = new object();
-		static TimeoutWatch _cacheTimeout;
-		static Dictionary<string, string> _cache = new Dictionary<string, string>();
+        static object _cacheLock = new object();
+        static TimeoutWatch _cacheTimeout;
+        static Dictionary<string, GoogleFinanceData> _cache = new Dictionary<string, GoogleFinanceData>();
 
-		#endregion
+        #endregion
 
-		[ExcelFunction(Description = "Retrieves stock data for the passed symbol. The InfoCode defines the type of data that will be returned. InfoCode values: NAME, DATE, TIME and PRICE (default).")]
-		public static object PSQ(string Symbol, string InfoCode)
-		{
-			return ExcelAsyncUtil.Run("PSQ", new object[] { Symbol, InfoCode }, () => PSQXFunction(true, Symbol, InfoCode));
-		}
+        [ExcelFunction(Description = "Retrieves stock data for the passed symbol. The InfoCode defines the type of data that will be returned. InfoCode values: NAME, LAST (default), OPEN, LOW, HIGH and many more. See Help button for more information.")]
+        public static object PSQ(string Symbol, string InfoCode)
+        {
+            return ExcelAsyncUtil.Run("PSQ", new object[] { Symbol, InfoCode }, () => PSQFunction(Symbol, InfoCode));
+        }
 
-		[ExcelFunction(Description = "Retrieves foreign-exchange data for the passed symbol. The InfoCode defines the type of data that will be returned. InfoCode values: NAME, DATE, TIME and RATE (default).")]
-		public static object PFX(string Symbol, string InfoCode)
-		{
-			return ExcelAsyncUtil.Run("PFX", new object[] { Symbol, InfoCode }, () => PSQXFunction(false, Symbol, InfoCode));
-		}
+        #region Helper Methods
 
-		#region Helper Methods
+        static object PSQFunction(string Symbol, string InfoCode)
+        {
+            if (string.IsNullOrWhiteSpace(Symbol))
+                throw new Exception("Symbol must be defined.");
+            if (string.IsNullOrWhiteSpace(InfoCode))
+                InfoCode = "PRICE";
 
-		static object PSQXFunction(bool stockQuote, string Symbol, string InfoCode)
-		{
-			if(string.IsNullOrWhiteSpace(Symbol))
-				throw new Exception("Symbol must be defined.");
-			if(string.IsNullOrWhiteSpace(InfoCode))
-				InfoCode = "PRICE";
+            var symbol = Symbol.Trim();
+            var data = default(GoogleFinanceData);
 
-			var symbol = Symbol.Trim();
-			var content = string.Empty;
+            try
+            {
+                if (_cacheTimeout == null)
+                {
+                    lock (_cacheLock)
+                        _cacheTimeout = new TimeoutWatch(TimeSpan.FromMinutes(1));
+                }
+                else if (_cacheTimeout.IsExpired)
+                {
+                    lock (_cacheLock)
+                    {
+                        _cache.Clear();
+                        _cacheTimeout = new TimeoutWatch(TimeSpan.FromMinutes(1));
+                    }
+                }
 
-			try
-			{
-				if(_cacheTimeout == null)
-				{
-					lock(_cacheLock)
-						_cacheTimeout = new TimeoutWatch(TimeSpan.FromMinutes(1));
-				}
-				else if(_cacheTimeout.IsExpired)
-				{
-					lock(_cacheLock)
-					{
-						_cache.Clear();
-						_cacheTimeout = new TimeoutWatch(TimeSpan.FromMinutes(1));
-					}
-				}
+                if (_cache.ContainsKey(symbol))
+                    data = _cache[symbol];
+                else
+                {
+                    data = GoogleFinanceHelper.GetQuote(symbol);
 
-				if(_cache.ContainsKey(symbol))
-					content = _cache[symbol];
-				else
-				{
-					var client = new WebClient();
-					Stream data = client.OpenRead("http://download.finance.yahoo.com/d/quotes.csv?s=" + symbol + (stockQuote ? string.Empty : "=X") + "&f=sl1d1t1n");
-					var reader = new StreamReader(data);
-					content = reader.ReadToEnd();
-					data.Close();
-					reader.Close();
+                    lock (_cacheLock)
+                    {
+                        if (_cache.ContainsKey(symbol))
+                            _cache[symbol] = data;
+                        else
+                            _cache.Add(symbol, data);
+                    }
+                }
 
-					lock(_cacheLock)
-					{
-						if(_cache.ContainsKey(symbol))
-							_cache[symbol] = content;
-						else
-							_cache.Add(symbol, content);
-					}
-				}
+                if (data == null)
+                    return ExcelError.ExcelErrorNA;
 
-				string[] quote = content.Split(",".ToCharArray());
+                switch (InfoCode.Trim().ToUpper())
+                {
+                    case "PRICE":
+                    case "CLOSE":
+                    case "LAST":
+                    case "RATE":
+                        return data.Last;
+                    case "NAME":
+                        return data.Name ?? string.Empty;
+                    case "DATE":
+                    case "DATELOCAL":
+                        if (data.Date == DateTime.MinValue || data.Date == DateTime.MaxValue)
+                            return ExcelError.ExcelErrorNA;
+                        return data.Date.ToShortDateString();
+                    case "TIME":
+                    case "TIMELOCAL":
+                        if (data.Date == DateTime.MinValue || data.Date == DateTime.MaxValue)
+                            return ExcelError.ExcelErrorNA;
+                        return data.Date.ToShortTimeString();
+                    case "OPEN":
+                        return data.Open;
+                    case "LOW":
+                        return data.Low;
+                    case "HIGH":
+                        return data.High;
+                    case "LOW52":
+                        return data.Low52;
+                    case "HIGH52":
+                        return data.High52;
+                    case "VOL":
+                    case "VOLUME":
+                        return data.Volume;
+                    case "CHG":
+                    case "CHANGE":
+                        return data.Change;
+                    case "CP":
+                    case "CHANGEIN%":
+                    case "CHANGEPERCENTAGE":
+                        return data.ChangePercentage;
+                    case "SYMBOL":
+                    case "TICKER":
+                        return data.Ticker ?? string.Empty;
+                    case "EXCHANGE":
+                        return data.Exchange ?? string.Empty;
+                    default:
+                        return data.Last;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Couldn't retrieve and process data from Google Finance service. Internal message: " + e.Message);
+            }
+        }
 
-				switch(InfoCode.Trim().ToUpper())
-				{
-					case "NAME":
-						return quote[4].Replace("\"", "").Replace("\r", "").Replace("\n", "");
-					case "DATE":
-						if(quote[2] == "N/A")
-							return ExcelError.ExcelErrorNA;
-						return Convert.ToDateTime(quote[2].Trim("\"".ToCharArray()), CultureInfo.InvariantCulture).ToShortDateString();
-					case "DATELOCAL":
-						if(quote[2] == "N/A")
-							return ExcelError.ExcelErrorNA;
-						return ConvertDateTimeToLocal(quote[2].Trim("\"".ToCharArray())).ToShortDateString();
-					case "TIME":
-						if(quote[3] == "N/A")
-							return ExcelError.ExcelErrorNA;
-						return Convert.ToDateTime(quote[3].Trim("\"".ToCharArray()), CultureInfo.InvariantCulture).ToShortTimeString();
-					case "TIMELOCAL":
-						if(quote[3] == "N/A")
-							return ExcelError.ExcelErrorNA;
-						return ConvertDateTimeToLocal(quote[3].Trim("\"".ToCharArray())).ToShortTimeString();
-					case "RATE":
-					case "PRICE":
-					default:
-						if(quote[1] == "N/A")
-							return ExcelError.ExcelErrorNA;
-						return Convert.ToDouble(quote[1], CultureInfo.InvariantCulture);
-				}
-			}
-			catch(Exception e)
-			{
-				throw new Exception("Couldn't retrieve and/or process financial data from internet service. Internal message: " + e.Message);
-			}
-		}
-
-		static DateTime ConvertDateTimeToLocal(string dateOrTime)
-		{
-			var time = Convert.ToDateTime(dateOrTime, CultureInfo.InvariantCulture);
-			var zone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-
-			return TimeZoneInfo.ConvertTime(time, zone, TimeZoneInfo.Local);
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }

@@ -1,17 +1,18 @@
 <DnaLibrary Name="PMStockQuote Excel Add-In" RuntimeVersion="v4.0">
-	<ExternalLibrary Path="PMStockQuote.dll" LoadFromBytes="true" ExplicitExports="true" Pack="true" />
-	<CustomUI>
-		<customUI xmlns='http://schemas.microsoft.com/office/2009/07/customui' loadImage='LoadImage'>
-			<ribbon startFromScratch="false">
-				<tabs>
-					<tab id="psqTab" label="STOCK QUOTE" insertAfterMso="TabAddIns">
-						<group id="psqGroup" label="Stock Quotes">
-							<button id="psqUpdateButton" label="Update" imageMso="QueryUpdate" size="large" onAction="OnUpdateButtonClick" />
-							<button id="psqAboutButton" label="About" imageMso="Info" size="large" onAction="OnAboutButtonClick" />
-						</group>
-					</tab>
-				</tabs>
-			</ribbon>
-		</customUI>
-	</CustomUI>
+  <ExternalLibrary Path="PMStockQuote.dll" LoadFromBytes="true" ExplicitExports="true" Pack="true" />
+  <CustomUI>
+    <customUI xmlns='http://schemas.microsoft.com/office/2009/07/customui' loadImage='LoadImage'>
+      <ribbon startFromScratch="false">
+        <tabs>
+          <tab id="psqTab" label="STOCK QUOTE" insertAfterMso="TabAddIns">
+            <group id="psqGroup" label="Stock Quotes">
+              <button id="psqUpdateButton" label="Update" imageMso="QueryUpdate" size="large" onAction="OnUpdateButtonClick" />
+              <button id="psqSearchButton" label="Search" imageMso="LookUp" size="large" onAction="OnSearchButtonClick" />
+              <button id="psqAboutButton" label="Help" imageMso="Help" size="large" onAction="OnAboutButtonClick" />
+            </group>
+          </tab>
+        </tabs>
+      </ribbon>
+    </customUI>
+  </CustomUI>
 </DnaLibrary>

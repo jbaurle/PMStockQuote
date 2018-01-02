@@ -2,8 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Program</StartAction>
-    <StartProgram>C:\Program Files\Microsoft Office\Office15\EXCEL.EXE</StartProgram>
-    <StartArguments>"C:\PMStockQuote\Source-Codeplex\pmstockquote\PMStockQuote\bin\Debug\PMStockQuote64.xll"</StartArguments>
+    <StartProgram>C:\Program Files\Microsoft Office\Root\Office16\EXCEL.EXE</StartProgram>
+    <StartArguments>"PMStockQuote-AddIn64.xll"</StartArguments>
     <StartWorkingDirectory>
     </StartWorkingDirectory>
   </PropertyGroup>
