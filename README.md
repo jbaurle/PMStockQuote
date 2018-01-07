@@ -1,20 +1,15 @@
-# IMPORTANT NOTICE
-
-The new version is now using the Google Finance API and is not compatible with the old add-in. Google Finance uses other ticker symbols. A new search dialog is now available and more data values can be retrieved. The old Stock Quote add-in was using the Yahoo Finance service to retrieve the stock quotes. The service has been terminated by Yahoo on 11/01/2017.
-
-----
 # PMStockQuote
 
 **RELEASE**
 
-Stock Quote Add-In For Excel 2018 R1<br>
-https://github.com/jbaurle/PMStockQuote/releases/tag/Stock_Quote_Add-In_For_Excel_2018_R1
+Stock Quote Add-In For Excel 2018 R2<br>
+https://github.com/jbaurle/PMStockQuote/releases/tag/Stock_Quote_Add-In_For_Excel_2018_R2
 
 To install the version download PMStockQuote.zip, extract the archive file and call either Install32.bat or Install64.bat depending on the Excel version (32/64-bit) installed on your computer. [What version of Office am I using?](https://support.office.com/en-us/article/About-Office-What-version-of-Office-am-I-using-932788b8-a3ce-44bf-bb09-e334518b8b19)
 
 **Stock Quote Add-In For Excel 2016 and 2013**
 
-The Stock Quote Add-In For Excel 2016/2013 is a small add-in based on the fantastic Excel-DNA library to retrieve stock data from Google Finance using the PSQ function.
+The Stock Quote Add-In For Excel 2016/2013 is a small add-in based on the fantastic Excel-DNA library to retrieve stock data from Google Finance using the PSQ function. This version is now using the Google Finance API. The old Stock Quote add-in was using the Yahoo Finance API to retrieve the stock quotes. The service has been terminated by Yahoo on 11/01/2017.
 
 **Usage**
 
@@ -37,11 +32,15 @@ The add-in is providing an Excel function called **PSQ** to retrieve stock data 
 
 DATE and TIME are the timestamp of the last query, not the last trade date. Google Finance API is not returning the this kind of data anymore.
 
+The second screenshot shows how to use the item reference notation to access all available data. Starting from the root object we are able to access the for instance the first figure data, e.g. "financials/0/f_figures/0/annual". This notation returns the value as string. To return the value as number, prefix the path with !: "!financials/0/f_figures/0/annual".
+
 **Screenshots**
 
 German Edition of Excel 2016:
 
 ![](docs/PMStockQuoteExcelAddIn2016.png)
+
+![](PMStockQuoteExcelAddIn2016TickerData.png)
 
 German Edition of Excel 2013:
 
