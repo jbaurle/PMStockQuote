@@ -32,7 +32,7 @@ The add-in is providing an Excel function called **PSQ** to retrieve stock data 
 
 DATE and TIME are the timestamp of the last query, not the last trade date. Google Finance API is not returning the this kind of data anymore.
 
-The second screenshot shows how to use the item reference notation to access all available data. Starting from the root object we are new able to access for instance the first figure data with **financials/0/f_figures/0/annual**. This notation returns the value as string. To return the value as number, prefix the path with !. The notation is case-sensitive.
+The second screenshot shows how to use the item reference notation to access all available data. Starting from the root object you are now able to access for instance the first figure data with **financials/0/f_figures/0/annual**. This notation returns the value as string. To return the value as number, prefix the path with !. The notation is case-sensitive.
 
 * **=PSQ("NASDAQ:GOOGL";"!financials/0/f_figures/0/annual")**
 * **=PSQ("NASDAQ:GOOGL";"avvo")**
