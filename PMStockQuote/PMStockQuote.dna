@@ -1,5 +1,6 @@
 <DnaLibrary Name="PMStockQuote Excel Add-In" RuntimeVersion="v4.0">
   <ExternalLibrary Path="PMStockQuote.dll" LoadFromBytes="true" ExplicitExports="true" Pack="true" />
+  <ExternalLibrary Path="Newtonsoft.Json.dll" LoadFromBytes="true" ExplicitExports="true" Pack="true" />
   <CustomUI>
     <customUI xmlns='http://schemas.microsoft.com/office/2009/07/customui' loadImage='LoadImage'>
       <ribbon startFromScratch="false">

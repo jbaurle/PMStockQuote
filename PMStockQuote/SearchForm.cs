@@ -48,10 +48,11 @@ namespace PMStockQuote
 
                 SearchResultsGrid.Rows.Clear();
 
+                // TODO: May add query asnyc?
                 var results = GoogleFinanceHelper.SearchTicker(SearchBox.Text);
 
                 foreach (var item in results)
-                    SearchResultsGrid.Rows.Add(item.Title, item.Ticker, item.Exchange);
+                    SearchResultsGrid.Rows.Add(item.Name, item.Symbol, item.Exchange);
 
                 if (SearchResultsGrid.Rows.Count > 0)
                 {
@@ -67,6 +68,20 @@ namespace PMStockQuote
                 {
                     SearchBox.SelectAll();
                     SearchBox.Focus();
+                }
+            });
+        }
+
+        void OnTickerDataButtonClick(object sender, EventArgs e)
+        {
+            Execute(() =>
+            {
+                if (SearchResultsGrid.SelectedRows.Count > 0)
+                {
+                    var ticker = SearchResultsGrid.SelectedRows[0].Cells[1].Value as string ?? string.Empty;
+                    var exchange = SearchResultsGrid.SelectedRows[0].Cells[2].Value as string ?? string.Empty;
+
+                    new JsonForm($"{exchange}:{ticker}").ShowDialog();
                 }
             });
         }
@@ -89,6 +104,7 @@ namespace PMStockQuote
         {
             Execute(() =>
             {
+                TickerDataButton.Enabled = SearchResultsGrid.SelectedRows.Count > 0;
                 CopyToClipboardButton.Enabled = SearchResultsGrid.SelectedRows.Count > 0;
             });
         }

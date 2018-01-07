@@ -22,7 +22,9 @@ namespace PMStockQuote
             get
             {
                 if (_isInfinite)
+                {
                     return false;
+                }
 
                 return RemainingTimeout < TimeSpan.Zero;
             }
@@ -33,7 +35,9 @@ namespace PMStockQuote
             get
             {
                 if (_isInfinite)
+                {
                     return Infinite;
+                }
 
                 return _timeout.Subtract(DateTime.Now.Subtract(_creationTime));
             }
@@ -45,7 +49,9 @@ namespace PMStockQuote
             _timeout = timeout;
 
             if (_timeout.Equals(Infinite))
+            {
                 _isInfinite = true;
+            }
         }
 
         public void Reset()
@@ -56,13 +62,17 @@ namespace PMStockQuote
         public void ThrowIfTimeoutExpired(string exceptionMessage)
         {
             if (RemainingTimeout < TimeSpan.Zero)
+            {
                 throw new TimeoutException(exceptionMessage);
+            }
         }
 
         public TimeSpan GetRemainingTimeoutAndThrowIfExpired(string exceptionMessage)
         {
             if (_isInfinite)
+            {
                 return Infinite;
+            }
 
             ThrowIfTimeoutExpired(exceptionMessage);
 

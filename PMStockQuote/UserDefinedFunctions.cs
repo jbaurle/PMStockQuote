@@ -13,7 +13,7 @@ namespace PMStockQuote
 
         static object _cacheLock = new object();
         static TimeoutWatch _cacheTimeout;
-        static Dictionary<string, GoogleFinanceData> _cache = new Dictionary<string, GoogleFinanceData>();
+        static Dictionary<string, JObjectData> _cache = new Dictionary<string, JObjectData>();
 
         #endregion
 
@@ -28,19 +28,26 @@ namespace PMStockQuote
         static object PSQFunction(string Symbol, string InfoCode)
         {
             if (string.IsNullOrWhiteSpace(Symbol))
+            {
                 throw new Exception("Symbol must be defined.");
+            }
+
             if (string.IsNullOrWhiteSpace(InfoCode))
+            {
                 InfoCode = "PRICE";
+            }
 
             var symbol = Symbol.Trim();
-            var data = default(GoogleFinanceData);
+            var data = default(JObjectData);
 
             try
             {
                 if (_cacheTimeout == null)
                 {
                     lock (_cacheLock)
+                    {
                         _cacheTimeout = new TimeoutWatch(TimeSpan.FromMinutes(1));
+                    }
                 }
                 else if (_cacheTimeout.IsExpired)
                 {
@@ -52,69 +59,90 @@ namespace PMStockQuote
                 }
 
                 if (_cache.ContainsKey(symbol))
+                {
                     data = _cache[symbol];
+
+                    if (data == null)
+                    {
+                        return ExcelError.ExcelErrorNA;
+                    }
+                }
                 else
                 {
                     data = GoogleFinanceHelper.GetQuote(symbol);
 
+                    if (data == null)
+                    {
+                        return ExcelError.ExcelErrorNA;
+                    }
+
                     lock (_cacheLock)
                     {
                         if (_cache.ContainsKey(symbol))
+                        {
                             _cache[symbol] = data;
+                        }
                         else
+                        {
                             _cache.Add(symbol, data);
+                        }
                     }
                 }
 
-                if (data == null)
-                    return ExcelError.ExcelErrorNA;
+                InfoCode = InfoCode.Trim();
 
-                switch (InfoCode.Trim().ToUpper())
+                switch (InfoCode.ToLowerInvariant())
                 {
-                    case "PRICE":
-                    case "CLOSE":
-                    case "LAST":
-                    case "RATE":
-                        return data.Last;
-                    case "NAME":
-                        return data.Name ?? string.Empty;
-                    case "DATE":
-                    case "DATELOCAL":
-                        if (data.Date == DateTime.MinValue || data.Date == DateTime.MaxValue)
-                            return ExcelError.ExcelErrorNA;
-                        return data.Date.ToShortDateString();
-                    case "TIME":
-                    case "TIMELOCAL":
-                        if (data.Date == DateTime.MinValue || data.Date == DateTime.MaxValue)
-                            return ExcelError.ExcelErrorNA;
-                        return data.Date.ToShortTimeString();
-                    case "OPEN":
-                        return data.Open;
-                    case "LOW":
-                        return data.Low;
-                    case "HIGH":
-                        return data.High;
-                    case "LOW52":
-                        return data.Low52;
-                    case "HIGH52":
-                        return data.High52;
-                    case "VOL":
-                    case "VOLUME":
-                        return data.Volume;
-                    case "CHG":
-                    case "CHANGE":
-                        return data.Change;
-                    case "CP":
-                    case "CHANGEIN%":
-                    case "CHANGEPERCENTAGE":
-                        return data.ChangePercentage;
-                    case "SYMBOL":
-                    case "TICKER":
-                        return data.Ticker ?? string.Empty;
-                    case "EXCHANGE":
-                        return data.Exchange ?? string.Empty;
+                    case "price":
+                    case "close":
+                    case "l":
+                    case "last":
+                    case "rate":
+                        return data.GetValueAsDouble("l");
+                    case "name":
+                        return data.GetValueAsString("name");
+                    case "date":
+                    case "datelocal":
+                        // Google Finance API is not returning the last trade date
+                        return DateTime.Now.ToShortDateString();
+                    case "time":
+                    case "timelocal":
+                        // Google Finance API is not returning the last trade time
+                        return DateTime.Now.ToShortTimeString();
+                    case "op":
+                    case "open":
+                        return data.GetValueAsDouble("op");
+                    case "lo":
+                    case "low":
+                        return data.GetValueAsDouble("lo");
+                    case "hi":
+                    case "high":
+                        return data.GetValueAsDouble("hi");
+                    case "lo52":
+                    case "low52":
+                        return data.GetValueAsDouble("lo52");
+                    case "hi52":
+                    case "high52":
+                        return data.GetValueAsDouble("hi52");
+                    case "v":
+                    case "vo":
+                    case "volume":
+                        return data.GetValueAsString("vo");
+                    case "change":
+                        return data.GetValueAsDouble("c");
+                    case "cp":
+                    case "changein%":
+                    case "changepercentage":
+                        return data.GetValueAsDouble("cp");
+                    case "t":
+                    case "symbol":
+                    case "ticker":
+                        return data.GetValueAsString("t", "symbol");
+                    case "e":
+                    case "exchange":
+                        return data.GetValueAsString("e", "exchange");
                     default:
-                        return data.Last;
+                        return data.GetValueFromPath(InfoCode);
                 }
             }
             catch (Exception e)
