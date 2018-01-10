@@ -39,6 +39,8 @@ The second screenshot shows how to use the item reference notation to access all
 * **=PSQ("ETR:DAI";"management/1/name")**
 * **=PSQ("MUTF:VTSAX";"!expense_ratio")**
 
+IMPORTANT: Currency rates (e.g. EURUSD or BTCUSD) are not available. The Google Finance API is not returning any values. To verify this, you may open the Search Ticker dialog, query for the currency rate symbol and click the Ticker Data button. The JSON data are not showing any rates.
+
 **Screenshots**
 
 German Edition of Excel 2016:
