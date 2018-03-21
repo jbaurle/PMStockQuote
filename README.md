@@ -1,3 +1,7 @@
+# IMPORTANT NOTICE
+
+**The Stock Quote add-in is using the Google Finance service to retrieve the stock quotes. The service seems to be terminated by Google in March 2018. The add-in is currently not working.**
+
 # PMStockQuote
 
 **RELEASE**
